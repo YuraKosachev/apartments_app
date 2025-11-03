@@ -2,6 +2,8 @@ package com.apartment.notification.core.builders;
 
 import com.apartment.kafka.models.Message;
 import org.apache.commons.text.StringSubstitutor;
+import org.springframework.core.io.ClassPathResource;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -13,7 +15,8 @@ public final class MarkdownMessageBuilder {
 
     public static String buildFromTemplate(String taskName, Message model) throws Exception {
         // 1. Загружаем шаблон
-        String template = Files.readString(Path.of("src/main/resources/templates/task_message.md"));
+        var resource = new ClassPathResource("templates/task_message.md");
+        String template = Files.readString(resource.getFile().toPath());
 
         // 2. Подготавливаем переменные
         String pricesBlock = Arrays.stream(model.getPrices())

@@ -3,6 +3,7 @@ CREATE TABLE notifications
     id         UUID                        NOT NULL,
     subject    VARCHAR(255),
     addressees TEXT,
+    photo      TEXT,
     body       TEXT                        NOT NULL,
     status     SMALLINT                    NOT NULL,
     type       SMALLINT                    NOT NULL,

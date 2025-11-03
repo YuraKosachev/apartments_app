@@ -36,6 +36,7 @@ public class Consumer {
                 var notification = Notification
                         .builder()
                         .type(message.getType())
+                        .photo(item.getPhoto())
                         .body(body)
                         .to(message.getTo())
                         .subject(message.getTopic())

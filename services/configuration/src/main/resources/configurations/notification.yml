@@ -35,4 +35,5 @@ task:
 api:
   telegram:
     message: https://api.telegram.org/bot%s/sendMessage
+    image: https://api.telegram.org/bot%s/sendPhoto
     botkey: ${NOTIFICATION_TELEGRAM_BOT_KEY}

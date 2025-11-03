@@ -10,13 +10,20 @@ import org.springframework.context.annotation.Configuration;
 public class ApiConfiguration {
 
     @Value("${api.telegram.message}")
-    private String teleframMessageApiFormat;
+    private String telegramMessageApiFormat;
+
+    @Value("${api.telegram.image}")
+    private String telegramImageApiFormat;
 
     @Value("${api.telegram.botkey}")
-    private String teleframBotKey;
+    private String telegramBotKey;
 
-    public String getTeleframMessageApiFormat() {
-        return teleframMessageApiFormat.formatted(teleframBotKey);
+    public String getTelegramMessageApiFormat() {
+        return telegramMessageApiFormat.formatted(telegramBotKey);
+    }
+
+    public String getTelegramImageApiFormat() {
+        return telegramImageApiFormat.formatted(telegramBotKey);
     }
 
 }

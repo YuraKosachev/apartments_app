@@ -10,6 +10,7 @@ import com.apartment.apartment_api.core.models.entities.Apartment;
 import com.apartment.apartment_api.core.models.entities.Task;
 import com.apartment.apartment_api.services.ApartmentService;
 import com.apartment.apartment_api.services.TaskService;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -18,6 +19,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +55,7 @@ public class TaskController {
                             schema = @Schema(implementation = TaskCreateDto.class),
                             examples = @ExampleObject(
                                     name = "Example Task",
-                                    value = "{ \"title\": \"Fix plumbing\", \"description\": \"Leak in kitchen\", \"apartmentId\": \"uuid-here\" }"
+                                    value = "{ \"name\": \"Fix plumbing\", \"predicate\": \"address.city.name = 'Минск'\", \"chat_id\": \"@ChannelName or chatId\" }"
                             )
                     )
             ),

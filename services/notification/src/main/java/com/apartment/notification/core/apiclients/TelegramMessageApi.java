@@ -25,7 +25,7 @@ public class TelegramMessageApi extends ApiClientBase<TelegramMessageRequest, In
         implements TelegramApiMessage {
 
     public TelegramMessageApi(HttpClient client, ApiConfiguration apiConfiguration) {
-        super(client, apiConfiguration.getTeleframMessageApiFormat(), Method.GET);
+        super(client, apiConfiguration.getTelegramMessageApiFormat(), Method.GET);
     }
 
 

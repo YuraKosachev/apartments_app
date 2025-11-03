@@ -33,6 +33,9 @@ public class Notification {
     @Column(nullable = false, columnDefinition = "TEXT")
     String body;
 
+    @Column( columnDefinition = "TEXT")
+    String photo;
+
     @Column(nullable = false)
     @Enumerated(EnumType.ORDINAL)
     NotificationStatus status;
