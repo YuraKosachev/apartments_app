@@ -1,0 +1,38 @@
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_PRODUCER_BOOTSTRAP_SERVERS}
+      group-id: notificationGroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: 'com.apartment'
+        spring.json.type.mapping: notificationMessage:com.apartment.kafka.models.NotificationMessage
+  datasource:
+    url: ${NOTIFICATION_DATASOURCE_URL}
+    username: ${NOTIFICATION_DATASOURCE_USERNAME}
+    password: ${NOTIFICATION_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    jpa:
+      hibernate:
+        ddl-auto: validate
+      database: postgresql
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+    flyway:
+      baseline-on-migrate: true
+      baseline-version: 0
+      enabled: true
+      baseline-description: "init"
+      user: ${spring.datasource.username}
+      password: ${spring.datasource.password}
+  server:
+    port: ${NOTIFICATION_SERVER_PORT}
+
+task:
+  send:
+    notification_cron: "*/10 * * * * *"
+api:
+  telegram:
+    message: https://api.telegram.org/bot%s/sendMessage
+    botkey: ${NOTIFICATION_TELEGRAM_BOT_KEY}

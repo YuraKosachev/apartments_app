@@ -1,0 +1,8 @@
+D:\Code\Java\Practice\apartments_app\common\kafka\src\main\java\com\apartment\kafka\constants\KafkaConstants.java
+D:\Code\Java\Practice\apartments_app\common\kafka\src\main\java\com\apartment\kafka\enums\ApartmentType.java
+D:\Code\Java\Practice\apartments_app\common\kafka\src\main\java\com\apartment\kafka\enums\Event.java
+D:\Code\Java\Practice\apartments_app\common\kafka\src\main\java\com\apartment\kafka\enums\NotificationType.java
+D:\Code\Java\Practice\apartments_app\common\kafka\src\main\java\com\apartment\kafka\models\Apartment.java
+D:\Code\Java\Practice\apartments_app\common\kafka\src\main\java\com\apartment\kafka\models\ApartmentMessage.java
+D:\Code\Java\Practice\apartments_app\common\kafka\src\main\java\com\apartment\kafka\models\Message.java
+D:\Code\Java\Practice\apartments_app\common\kafka\src\main\java\com\apartment\kafka\models\NotificationMessage.java

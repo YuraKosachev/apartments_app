@@ -1,0 +1,6 @@
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+server:
+  port: ${DISCOVER_SERVER_PORT}

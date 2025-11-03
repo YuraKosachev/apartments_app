@@ -1,0 +1,5 @@
+ALTER TABLE addresses
+    ALTER COLUMN formatted SET NOT NULL;
+
+ALTER TABLE addresses
+    ALTER COLUMN city_id DROP NOT NULL;

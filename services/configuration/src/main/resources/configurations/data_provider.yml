@@ -1,0 +1,44 @@
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_PRODUCER_BOOTSTRAP_SERVERS}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      compression-type: lz4
+      properties:
+        max.request.size: 2097152
+        spring.json.type.mapping: apartmentMessage:com.apartment.kafka.models.ApartmentMessage,notificationMessage:com.apartment.kafka.models.NotificationMessage
+  datasource:
+    url: ${DATA_PROVIDER_DATASOURCE_URL}
+    username: ${DATA_PROVIDER_DATASOURCE_USERNAME}
+    password: ${DATA_PROVIDER_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 0
+    enabled: true
+    baseline-description: "init"
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+
+server:
+  port: ${DATA_PROVIDER_SERVER_PORT}
+
+task:
+  geoapify:
+    url: https://api.geoapify.com/v1/geocode/reverse
+    apikey: ${GEOAPIFY_APIKEY}
+  publisher:
+    cron: "*/10 * * * * *"
+  onliner:
+    rent_cron: "*/15 * * * * *"
+    notification_cron: "*/5 * * * * *"
+    apartment_cron: "*/7 * * * * *"
+    rent_url: https://r.onliner.by/sdapi/ak.api/search/apartments
+    sale_cron: "*/10 * * * * *"
+    sale_url: https://r.onliner.by/sdapi/pk.api/search/apartments

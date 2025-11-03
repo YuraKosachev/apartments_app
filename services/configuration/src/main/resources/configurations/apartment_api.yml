@@ -1,0 +1,51 @@
+spring:
+  kafka:
+    consumer:
+      max-poll-interval-ms: 900000
+      bootstrap-servers: ${KAFKA_PRODUCER_BOOTSTRAP_SERVERS}
+      group-id: apartmentGroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      compression-type: lz4
+      properties:
+        max.request.size: 2097152
+        spring.json.trusted.packages: 'com.apartment'
+        spring.json.type.mapping: apartmentMessage:com.apartment.kafka.models.ApartmentMessage
+    producer:
+      bootstrap-servers: ${KAFKA_PRODUCER_BOOTSTRAP_SERVERS}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      compression-type: lz4
+      properties:
+        max.request.size: 2097152
+        spring.json.type.mapping: notificationMessage:com.apartment.kafka.models.NotificationMessage
+  datasource:
+    url: ${APARTMENT_DATASOURCE_URL}
+    username: ${APARTMENT_DATASOURCE_USERNAME}
+    password: ${APARTMENT_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 0
+    enabled: true
+    baseline-description: "init"
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+
+server:
+  port: ${APARTMENT_SERVER_PORT}
+task:
+  notification:
+    cron: "*/10 * * * * *"
+springdoc:
+  #  api-docs:
+  #    path: /api-docs
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /

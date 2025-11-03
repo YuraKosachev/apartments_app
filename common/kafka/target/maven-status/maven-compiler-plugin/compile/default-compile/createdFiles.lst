@@ -1,0 +1,11 @@
+com\apartment\kafka\models\Message.class
+com\apartment\kafka\models\NotificationMessage.class
+com\apartment\kafka\enums\NotificationType.class
+com\apartment\kafka\models\NotificationMessage$NotificationMessageBuilder.class
+com\apartment\kafka\models\Apartment.class
+com\apartment\kafka\enums\Event.class
+com\apartment\kafka\models\ApartmentMessage.class
+com\apartment\kafka\models\Message$MessageBuilder.class
+com\apartment\kafka\enums\ApartmentType.class
+com\apartment\kafka\constants\KafkaConstants.class
+com\apartment\kafka\models\ApartmentMessage$ApartmentMessageBuilder.class

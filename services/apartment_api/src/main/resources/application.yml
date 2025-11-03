@@ -1,0 +1,6 @@
+spring:
+  config:
+    import: configserver:${CONFIGURATION_ENDPOINT_HOST}:${CONFIGURATION_ENDPOINT_PORT}
+  application:
+    name: apartment_api
+

@@ -1,0 +1,2 @@
+ALTER TABLE addresses
+    ALTER COLUMN county_id DROP NOT NULL;
