@@ -4,8 +4,7 @@ import com.apartment.kafka.models.Message;
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.core.io.ClassPathResource;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,9 +13,9 @@ import java.util.stream.Collectors;
 public final class MarkdownMessageBuilder {
 
     public static String buildFromTemplate(String taskName, Message model) throws Exception {
-        // 1. Загружаем шаблон
+        // 1. Загружаем шаблон из classpath
         var resource = new ClassPathResource("templates/task_message.md");
-        String template = Files.readString(resource.getFile().toPath());
+        String template = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 
         // 2. Подготавливаем переменные
         String pricesBlock = Arrays.stream(model.getPrices())
@@ -34,9 +33,10 @@ public final class MarkdownMessageBuilder {
         return new StringSubstitutor(values).replace(template);
     }
 
-    // 🧹 Экранируем MarkdownV2 спецсимволы (важно для Telegram)
+    // 🧹 Экранируем MarkdownV2 спецсимволы (для Telegram)
     private static String escapeMarkdown(String input) {
         if (input == null) return "";
         return input.replaceAll("([_*\\[\\]()~`>#+\\-=|{}.!])", "\\\\$1");
     }
 }
+
