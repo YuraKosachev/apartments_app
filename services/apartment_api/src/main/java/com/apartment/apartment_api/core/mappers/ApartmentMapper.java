@@ -21,7 +21,7 @@ public class ApartmentMapper {
     public Message toMessage(ApartmentShortDto shortDto) {
         if (shortDto == null) return null;
         String description = shortDto.getApartmentType() == ApartmentType.SALE
-                ? "кол-во комнат - %d,\nэтаж - %d,\nкухня - %.2f,\nжилая - %.2f,\nобщая - %.2f".formatted(shortDto.getRooms(),
+                ? "комнаты - %d, этаж - %d,\n кухня - %.2f, жилая - %.2f,\n общая - %.2f".formatted(shortDto.getRooms(),
                     shortDto.getFloor(),
                     shortDto.getKitchen(),
                     shortDto.getLiving(),
