@@ -5,6 +5,7 @@ import com.apartment.apartment_api.core.models.dtos.ApartmentShortDto;
 import com.apartment.apartment_api.core.models.dtos.PriceDto;
 import com.apartment.apartment_api.core.models.entities.Apartment;
 import com.apartment.apartment_api.core.models.entities.Task;
+import com.apartment.kafka.enums.ApartmentType;
 import com.apartment.kafka.enums.Event;
 import com.apartment.kafka.models.Message;
 import jakarta.persistence.Column;
@@ -18,26 +19,76 @@ import java.util.Arrays;
 public class ApartmentMapper {
 
     public Message toMessage(ApartmentShortDto shortDto) {
-        if(shortDto == null) return null;
+        if (shortDto == null) return null;
+        String description = shortDto.getApartmentType() == ApartmentType.SALE
+                ? "кол-во комнат - %d,\nэтаж - %d,\nкухня - %.2f,\nжилая - %.2f,\nобщая - %.2f".formatted(shortDto.getRooms(),
+                    shortDto.getFloor(),
+                    shortDto.getKitchen(),
+                    shortDto.getLiving(),
+                    shortDto.getTotal())
+                : null;
         return Message.builder()
                 .url(shortDto.getUrl())
                 .message(shortDto.getAddress())
-                .description("кухня - %.2f, жилая - %.2f, общая - %.2f".formatted(shortDto.getKitchen(), shortDto.getLiving(), shortDto.getTotal()))
+                .description(description)
                 .photo(shortDto.getPhoto())
-                .prices(Arrays.stream(shortDto.getPrices())
-                        .map(item->"%.2f %s %s".formatted(item.amount(), item.currency(), item.date().format(DateTimeFormatter.ofPattern(DateTimeConstants.DATE_FORMAT)))).toArray(String[]::new))
+                .prices(getFormattedPrices(shortDto.getPrices()))
                 .build();
     }
 
+
+    private String[] getFormattedPrices(PriceDto[] prices) {
+        if (prices == null || prices.length == 0) {
+            return new String[0];
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateTimeConstants.DATE_FORMAT);
+        String baseFormat = "%.2f %s %s";
+        String upIcon = " 🔺";
+        String downIcon = " 🔻";
+
+        String[] formattedPrices = new String[prices.length];
+
+        for (int i = 0; i < prices.length; i++) {
+            PriceDto current = prices[i];
+            String icon = "";
+
+            if (i > 0) {
+                double prevAmount = prices[i - 1].amount();
+                if (current.amount() > prevAmount) {
+                    icon = " " + upIcon;
+                } else if (current.amount() < prevAmount) {
+                    icon = " " + downIcon;
+                }
+            }
+
+            formattedPrices[i] = String.format(
+                    baseFormat + "%s",
+                    current.amount(),
+                    current.currency(),
+                    current.date().format(formatter),
+                    icon
+            );
+        }
+
+        return formattedPrices;
+    }
+
+
+
     public ApartmentShortDto toApartmentShortDto(Apartment apartment) {
-        if(apartment == null) return null;
+        if (apartment == null) return null;
 
         return ApartmentShortDto.builder()
                 .apartmentId(apartment.getId())
                 .address(apartment.getAddress().getFormatted())
                 .prices(apartment.getPrices().stream()
-                        .map(x-> new PriceDto(x.getAmount(),x.getCurrency(),x.getCreatedAt()))
+                        .map(x -> new PriceDto(x.getAmount(), x.getCurrency(), x.getCreatedAt()))
                         .toArray(PriceDto[]::new))
+                .apartmentType(apartment.getApartmentType())
+                .rooms(apartment.getNumberOfRooms())
+                .floor(apartment.getFloor())
+                .owner(apartment.getOwner())
                 .url(apartment.getUrl())
                 .photo(apartment.getPhoto())
                 .total(apartment.getTotal())
@@ -46,8 +97,9 @@ public class ApartmentMapper {
                 .build();
 
     }
+
     public Apartment mapApartmentToApartment(final com.apartment.kafka.models.Apartment source) {
-        if(source == null) return null;
+        if (source == null) return null;
         return Apartment.builder()
                 .apartmentType(source.apartmentType())
                 .floor(source.propertyInfo().floor())
