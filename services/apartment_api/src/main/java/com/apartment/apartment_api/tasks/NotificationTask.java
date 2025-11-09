@@ -4,6 +4,7 @@ import com.apartment.apartment_api.core.builders.AdvancedSpecificationBuilder;
 import com.apartment.apartment_api.core.kafka.Consumer;
 import com.apartment.apartment_api.core.kafka.Producer;
 import com.apartment.apartment_api.core.mappers.ApartmentMapper;
+import com.apartment.apartment_api.core.models.dtos.FoundTask;
 import com.apartment.apartment_api.core.models.entities.Apartment;
 import com.apartment.apartment_api.core.models.entities.Task;
 import com.apartment.apartment_api.core.models.entities.TaskApartment;
@@ -16,12 +17,11 @@ import com.apartment.kafka.models.Message;
 import com.apartment.kafka.models.NotificationMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.stream.Collectors;
+
 
 @Component
 @RequiredArgsConstructor
@@ -41,14 +41,15 @@ public class NotificationTask {
         log.info("Handling tasks");
         var tasks = taskRepository.findAll();
         var foundIds = tasks.stream()
+                .filter(t -> t.getFound() != null)
                 .flatMap(t -> t.getFound().stream())
-                .map(f -> f.getApartment().getId())
+                .map(f -> new FoundTask(f.getTask().getId(), f.getApartment().getId()))
                 .collect(Collectors.toSet());
         for (var task : tasks) {
             try {
                 var specification = specificationBuilder.build(task.getPredicate(), Apartment.class);
                 var apartments = apartmentRepository.findAll(specification).stream()
-                        .filter(ap -> !foundIds.contains(ap.getId()))
+                        .filter(ap -> !foundIds.contains(new FoundTask(task.getId(), ap.getId())))
                         .map(apartmentMapper::toApartmentShortDto).collect(Collectors.toList());
                 if (apartments.isEmpty()) {
                     log.info("Handling task completed with no apartment found");
@@ -78,20 +79,4 @@ public class NotificationTask {
             }
         }
     }
-
-//    @Transactional(readOnly = true)
-//    protected void taskHandling(Task task) {
-//        var specification = specificationBuilder.build(task.getPredicate(), Apartment.class);
-//        var apartments = apartmentRepository.findAll(specification).stream().map(apartmentMapper::toApartmentShortDto).collect(Collectors.toList());
-//        if(apartments.isEmpty()) {
-//            return;
-//        }
-    //var messages = apartments
-    //var taskApartments = apartments.stream().map(ap -> TaskApartment.builder()
-//                .apartment(Apartment.builder().id(ap.getApartmentId()).build())
-//                .task(task)
-//                .build()).toList();
-//        taskApartmentRepository.saveAll(taskApartments);
-    //  }
-
 }

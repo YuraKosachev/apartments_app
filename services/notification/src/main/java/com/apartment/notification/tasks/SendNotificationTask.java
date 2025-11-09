@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
@@ -46,20 +47,6 @@ public class SendNotificationTask {
 
                 for (var to : notification.getTo()) {
                     var content = URLEncoder.encode(notification.getBody(), StandardCharsets.UTF_8);
-
-//                    if(notification.getPhoto() != null) {
-//
-//                        var request = TelegramPhotoRequest.builder()
-//                                .chatId(to)
-//                                .caption(content)
-//                                .photoUrl(notification.getPhoto())
-//                                .parseMode(ParseMode.MARKDOWNV2)
-//                                .build();
-//                        telegramApiPhoto.sendMessage(request);
-//                        continue;
-//                    }
-
-
                     var request = TelegramMessageRequest.builder()
                             .chatId(to)
                             .message(content)
@@ -68,6 +55,7 @@ public class SendNotificationTask {
                     telegramApiMessage.sendMessage(request);
                 }
                 notification.setStatus(NotificationStatus.SENT);
+                notification.setSentAt(LocalDateTime.now());
             } catch (Exception e) {
                 notification.setStatus(NotificationStatus.ERROR);
             }
