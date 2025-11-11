@@ -12,6 +12,6 @@ public class Message {
     String photo;
     String url;
     String[] prices;
-    String description;
-    String message;
+    String[] description;
+    String[] message;
 }

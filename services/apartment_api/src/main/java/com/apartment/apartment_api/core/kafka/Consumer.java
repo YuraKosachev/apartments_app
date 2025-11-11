@@ -33,7 +33,7 @@ public class Consumer {
     private final AddressRepository addressRepository;
     private final PriceRepository priceRepository;
 
-    private Map<String, String> countryMaps = Map.of("Белоруссия", "Беларусь");
+    private final Map<String, String> countryMaps = Map.of("Белоруссия", "Беларусь");
 
     @Transactional
     public void handleData(ApartmentMessage message) {
@@ -115,7 +115,7 @@ public class Consumer {
                     .filter(a -> a.getSourceId().equals(sourceApartment.id()))
                     .findFirst();
 
-            if (!existing.isPresent()) {
+            if (existing.isEmpty()) {
                 //TODO if present
                 var city = cities.stream().filter(c -> sourceApartment.geoInfo().city() != null
                         && c.getName().equals(sourceApartment.geoInfo().city())).findFirst();

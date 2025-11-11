@@ -4,32 +4,39 @@ import com.apartment.apartment_api.core.constants.DateTimeConstants;
 import com.apartment.apartment_api.core.models.dtos.ApartmentShortDto;
 import com.apartment.apartment_api.core.models.dtos.PriceDto;
 import com.apartment.apartment_api.core.models.entities.Apartment;
-import com.apartment.apartment_api.core.models.entities.Task;
 import com.apartment.kafka.enums.ApartmentType;
 import com.apartment.kafka.enums.Event;
 import com.apartment.kafka.models.Message;
-import jakarta.persistence.Column;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 
 @Component
 public class ApartmentMapper {
 
     public Message toMessage(ApartmentShortDto shortDto) {
         if (shortDto == null) return null;
-        String description = shortDto.getApartmentType() == ApartmentType.SALE
-                ? "комнаты - %d, этаж - %d,\n\u00A0\u00A0\u00A0\u00A0кухня - %.2f, жилая - %.2f,\n\u00A0\u00A0\u00A0\u00A0общая - %.2f".formatted(shortDto.getRooms(),
-                    shortDto.getFloor(),
-                    shortDto.getKitchen(),
-                    shortDto.getLiving(),
-                    shortDto.getTotal())
-                : null;
+
+        String[] description = null;
+
+        if(shortDto.getApartmentType() == ApartmentType.SALE){
+            description = new String[]{
+              "комнаты - %d, этаж - %d".formatted(shortDto.getRooms(), shortDto.getFloor()),
+              "кухня - %.2f, жилая - %.2f".formatted(shortDto.getKitchen(), shortDto.getLiving()),
+                    "общая - %.2f".formatted(shortDto.getTotal())
+            };
+        }
+
+//        String description = shortDto.getApartmentType() == ApartmentType.SALE
+//                ? "комнаты - %d, этаж - %d,\n\u00A0\u00A0\u00A0\u00A0кухня - %.2f, жилая - %.2f,\n\u00A0\u00A0\u00A0\u00A0общая - %.2f".formatted(shortDto.getRooms(),
+//                    shortDto.getFloor(),
+//                    shortDto.getKitchen(),
+//                    shortDto.getLiving(),
+//                    shortDto.getTotal())
+//                : null;
         return Message.builder()
                 .url(shortDto.getUrl())
-                .message(shortDto.getAddress())
+                .message(new String[]{shortDto.getAddress()})
                 .description(description)
                 .photo(shortDto.getPhoto())
                 .prices(getFormattedPrices(shortDto.getPrices()))

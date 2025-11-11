@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class NotificationMapper {
     public Message toNotificationMessage(EventLog eventLog) {
-        if(eventLog == null) return null;
+        if (eventLog == null) return null;
         return Message.builder()
-                .message(eventLog.getContent())
+                .message(new String[]{eventLog.getContent()})
                 .build();
     }
 }

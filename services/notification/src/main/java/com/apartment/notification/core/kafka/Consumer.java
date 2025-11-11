@@ -30,8 +30,8 @@ public class Consumer {
             log.info("Consuming message...");
 
             for (var item : message.getMessages()) {
-                var body =message.getType() != NotificationType.TASK_INFO
-                        ? item.getMessage()
+                var body = message.getType() != NotificationType.TASK_INFO
+                        ? MarkdownMessageBuilder.joinCollection(item.getMessage(), "\n")
                         : MarkdownMessageBuilder.buildFromTemplate(message.getTopic(), item);
                 var notification = Notification
                         .builder()
