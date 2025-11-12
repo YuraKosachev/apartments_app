@@ -117,7 +117,7 @@ public class TaskController {
                     )
             }
     )
-    public ResponseEntity<List<TaskDto>> getTasks(@RequestParam(value = "chat_id", required = false) UUID chatId) {
+    public ResponseEntity<List<TaskDto>> getTasks(@RequestParam(value = "chat_id", required = false) String chatId) {
         Specification<Task> spec = Specification.allOf();
 
         if (chatId != null) {
