@@ -36,9 +36,9 @@ task:
   publisher:
     cron: "*/10 * * * * *"
   onliner:
-    rent_cron: "*/15 * * * * *"
+    rent_cron: "0 */9 * * * *"
     notification_cron: "*/5 * * * * *"
     apartment_cron: "*/7 * * * * *"
     rent_url: https://r.onliner.by/sdapi/ak.api/search/apartments
-    sale_cron: "*/10 * * * * *"
+    sale_cron: "0 */6 * * * *"
     sale_url: https://r.onliner.by/sdapi/pk.api/search/apartments

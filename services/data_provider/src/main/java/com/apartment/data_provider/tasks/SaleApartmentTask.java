@@ -51,7 +51,10 @@ public class SaleApartmentTask extends BaseApartmentTask {
         try {
             var apartments = apartmentRepository.getAllByTypes(Set.of(ApartmentType.SALE));
             List<OnlinerApartmentSale> source = onlinerService.getSales();
-
+            if(source == null || source.isEmpty()) {
+                log.info("SaleApartment source is null or empty");
+                return;
+            }
             List<Apartment> inserted = new ArrayList<>();
             List<Apartment> updated = new ArrayList<>();
 
