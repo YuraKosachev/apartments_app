@@ -52,7 +52,8 @@ public abstract class ApiClientBase<TRequest, TResponse> implements DataClient<T
 
         HttpRequest request = builderRequest.build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = client
+                .send(request, HttpResponse.BodyHandlers.ofString());
         return responseHandler(response);
     }
 

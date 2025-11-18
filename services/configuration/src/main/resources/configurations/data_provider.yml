@@ -35,6 +35,9 @@ task:
     apikey: ${GEOAPIFY_APIKEY}
   publisher:
     cron: "*/10 * * * * *"
+  proxy:
+    host: ${HOLA_PROXY_HOST}
+    port: ${HOLA_PROXY_PORT}
   onliner:
     rent_cron: "0 */9 * * * *"
     notification_cron: "*/5 * * * * *"
