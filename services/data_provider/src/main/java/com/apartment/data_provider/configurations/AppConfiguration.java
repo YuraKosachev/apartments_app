@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import java.net.http.HttpClient;
 
@@ -18,6 +19,7 @@ public class AppConfiguration {
     private int proxyPort;
 
     @Bean
+    @Primary
     public HttpClient getHttpClient() {
         return HttpClient.newHttpClient();
     }
