@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.apache.hc.core5.http.Method;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class OnlinerRentApartmentAll
         extends OnlineApiClient<OnlinerRequest, OnlinerResponse<OnlinerApartmentRent>>
         implements RentApartmentAll {
     private final ObjectMapper mapper;
-    public OnlinerRentApartmentAll(HttpClient client,
+    public OnlinerRentApartmentAll(@Qualifier("torHttpClient")HttpClient client,
                                    ObjectMapper mapper,
                                    OnlinerConfiguration configuration) {
         super(client, configuration.getRentUrl(), Method.GET);

@@ -17,7 +17,7 @@ public class AppConfiguration {
     @Value("${proxy.port}")
     private int proxyPort;
 
-    @Bean
+    @Bean(name = "torHttpClient")
     public HttpClient getHttpClient(){
 
         // --- ВАЖНО: включаем SOCKS5 для JVM ---

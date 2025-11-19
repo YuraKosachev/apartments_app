@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.http.Method;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class OnlinerSaleApartmentAll
 
     private final ObjectMapper mapper;
 
-    public OnlinerSaleApartmentAll(HttpClient client,
+    public OnlinerSaleApartmentAll(@Qualifier("torHttpClient")HttpClient client,
                                    OnlinerConfiguration configuration,
                                    ObjectMapper mapper) {
         super(client, configuration.getSaleUrl(), Method.GET);
