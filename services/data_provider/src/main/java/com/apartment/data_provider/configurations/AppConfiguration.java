@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import java.net.ProxySelector;
 import java.net.http.HttpClient;
 
 @Configuration
@@ -25,18 +26,27 @@ public class AppConfiguration {
     }
 
     @Bean(name = "torHttpClient")
-    public HttpClient getTorHttpClient(){
+    public HttpClient getTorHttpClient() {
+        ProxySelector proxySelector = new ProxySelector() {
+            @Override
+            public java.util.List<java.net.Proxy> select(java.net.URI uri) {
+                return java.util.List.of(
+                        new java.net.Proxy(java.net.Proxy.Type.SOCKS, new java.net.InetSocketAddress(proxyHost, proxyPort))
+                );
+            }
 
-        // --- ВАЖНО: включаем SOCKS5 для JVM ---
-        System.setProperty("socksProxyHost", proxyHost);
-        System.setProperty("socksProxyPort", String.valueOf(proxyPort));
+            @Override
+            public void connectFailed(java.net.URI uri, java.net.SocketAddress sa, java.io.IOException ioe) {
+                ioe.printStackTrace();
+            }
+        };
 
-        // HttpClient больше НЕ использует ProxySelector,
-        // он работает через SOCKS5 прозрачным образом.
         return HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
+                .proxy(proxySelector)
                 .build();
     }
+
 
     @Bean
     public ObjectMapper getObjectMapper() {
