@@ -17,8 +17,13 @@ public class AppConfiguration {
     @Value("${proxy.port}")
     private int proxyPort;
 
+    @Bean
+    public HttpClient getHttpClient() {
+        return HttpClient.newHttpClient();
+    }
+
     @Bean(name = "torHttpClient")
-    public HttpClient getHttpClient(){
+    public HttpClient getTorHttpClient(){
 
         // --- ВАЖНО: включаем SOCKS5 для JVM ---
         System.setProperty("socksProxyHost", proxyHost);
