@@ -26,7 +26,7 @@ public class OnlinerSaleApartmentAll
 
     private final ObjectMapper mapper;
 
-    public OnlinerSaleApartmentAll(@Qualifier("proxyHttpClient")HttpClient client,
+    public OnlinerSaleApartmentAll(@Qualifier("socksHttpClient")HttpClient client,
                                    OnlinerConfiguration configuration,
                                    ObjectMapper mapper) {
         super(client, configuration.getSaleUrl(), Method.GET);

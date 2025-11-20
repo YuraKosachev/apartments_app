@@ -88,8 +88,8 @@ public class AppConfiguration {
     public HttpClient getHttpClient() {
         return HttpClient.newHttpClient();
     }
-    
-    @Bean(name = "torHttpClient")
+
+    @Bean(name = "socksHttpClient")
     public HttpClient getTorHttpClient() {
         ProxySelector proxySelector = new ProxySelector() {
             @Override
@@ -104,12 +104,11 @@ public class AppConfiguration {
                 ioe.printStackTrace();
             }
         };
-
         return HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_2)
                 .proxy(proxySelector)
                 .build();
     }
+
 
     @Bean(name = "proxyHttpClient")
     public HttpClient getProxyHttpClient(){
