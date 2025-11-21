@@ -52,6 +52,7 @@ public class RentApartmentTask extends BaseApartmentTask {
         log.info("RentApartment task started");
         try {
             var apartments = apartmentRepository.getAllByTypes(Set.of(ApartmentType.RENT));
+            log.info("RentApartment get source data");
             List<OnlinerApartmentRent> source = onlinerService.getRents();
 
             List<Apartment> inserted = new ArrayList<>();
@@ -72,6 +73,7 @@ public class RentApartmentTask extends BaseApartmentTask {
                         entity.setDeletedAt(null);
 
                         if(entity.getGeoDataStatus() != GeoDataStatus.PROCESSED) {
+                            log.info("Geodata proccessing");
                             setGeoData(entity);
                         }
                         updated.add(entity);

@@ -50,6 +50,7 @@ public class SaleApartmentTask extends BaseApartmentTask {
         log.info("SaleApartment task started");
         try {
             var apartments = apartmentRepository.getAllByTypes(Set.of(ApartmentType.SALE));
+            log.info("SaleApartment get source data");
             List<OnlinerApartmentSale> source = onlinerService.getSales();
             if(source == null || source.isEmpty()) {
                 log.info("SaleApartment source is null or empty");
@@ -70,6 +71,7 @@ public class SaleApartmentTask extends BaseApartmentTask {
                          entity.setEvent(Event.UPDATED);
                          entity.setDeletedAt(null);
                          if(entity.getGeoDataStatus() != GeoDataStatus.PROCESSED) {
+                             log.info("geodata proccessing");
                              setGeoData(entity);
                          }
                          updated.add(entity);
