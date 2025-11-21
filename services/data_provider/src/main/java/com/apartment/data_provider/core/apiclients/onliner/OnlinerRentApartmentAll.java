@@ -24,7 +24,7 @@ public class OnlinerRentApartmentAll
         extends OnlineApiClient<OnlinerRequest, OnlinerResponse<OnlinerApartmentRent>>
         implements RentApartmentAll {
     private final ObjectMapper mapper;
-    public OnlinerRentApartmentAll(@Qualifier("proxyHttpClient")HttpClient client,
+    public OnlinerRentApartmentAll(@Qualifier("socksHttpClient")HttpClient client,
                                    ObjectMapper mapper,
                                    OnlinerConfiguration configuration) {
         super(client, configuration.getRentUrl(), Method.GET);
