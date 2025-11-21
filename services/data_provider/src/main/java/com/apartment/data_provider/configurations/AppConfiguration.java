@@ -83,6 +83,8 @@ public class AppConfiguration {
     @Value("${proxy.port}")
     private int proxyPort;
 
+
+
     @Bean
     @Primary
     public HttpClient getHttpClient() {
