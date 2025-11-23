@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,7 @@ public class SaleApartmentTask extends BaseApartmentTask {
     @Scheduled(cron = "${task.onliner.sale_cron}")
     public void run() {
         log.info("SaleApartment task started");
+        var startTime = LocalDateTime.now();
         try {
             var apartments = apartmentRepository.getAllByTypes(Set.of(ApartmentType.SALE));
             log.info("SaleApartment get source data");
@@ -105,7 +107,9 @@ public class SaleApartmentTask extends BaseApartmentTask {
             if(!deleted.isEmpty()){
                 apartmentRepository.saveAll(deleted);
             }
-            log.info(String.format("SaleApartment task finished inserted: %d deleted: %d, updated: %d source:%d", inserted.size(), deleted.size(), updated.size(), source.size()));
+            var duration = Duration.between(startTime, LocalDateTime.now());
+            var parsingTime = "%d h %d m.".formatted(duration.toHours(), duration.toMinutesPart());
+            log.info(String.format("SaleApartment task finished inserted: %d deleted: %d, updated: %d source:%d. Parsing took -> %s", inserted.size(), deleted.size(), updated.size(), source.size(), parsingTime));
         }catch (Exception e){
             log.error(e.getMessage());
             var log = EventLog.builder()
