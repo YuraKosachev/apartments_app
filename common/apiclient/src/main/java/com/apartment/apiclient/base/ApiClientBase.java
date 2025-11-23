@@ -15,6 +15,8 @@ import org.apache.hc.core5.http.Method;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import org.apache.hc.core5.http.Method;
+
+import javax.net.ssl.SSLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.http.HttpClient;
@@ -52,8 +54,14 @@ public abstract class ApiClientBase<TRequest, TResponse> implements DataClient<T
 
         HttpRequest request = builderRequest.build();
 
-        HttpResponse<String> response = client
-                .send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = null;
+
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            // логируем и пробуем заново
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        }
         return responseHandler(response);
     }
 
