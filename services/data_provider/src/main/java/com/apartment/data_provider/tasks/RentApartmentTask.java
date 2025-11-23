@@ -85,7 +85,7 @@ public class RentApartmentTask extends BaseApartmentTask {
                 }
                 var newEntity = rentApartmentMapper.toEntity(apartment);
 
-                log.info("rent geodata proccessing... for -> lat: f% long:f5".formatted(newEntity.getLatitude(), newEntity.getLongitude()));
+                log.info("rent geodata proccessing... for -> lat: %f long: %f".formatted(newEntity.getLatitude(), newEntity.getLongitude()));
                 setGeoData(newEntity);
 
                 inserted.add(newEntity);

@@ -81,7 +81,7 @@ public class SaleApartmentTask extends BaseApartmentTask {
                      continue;
                  }
                  var newEntity = saleApartmentMapper.toEntity(apartment);
-                log.info("sale geodata proccessing... for -> lat: f% long:f5".formatted(newEntity.getLatitude(), newEntity.getLongitude()));
+                log.info("sale geodata proccessing... for -> lat: %f long: %f".formatted(newEntity.getLatitude(), newEntity.getLongitude()));
                  setGeoData(newEntity);
                  inserted.add(newEntity);
             }
