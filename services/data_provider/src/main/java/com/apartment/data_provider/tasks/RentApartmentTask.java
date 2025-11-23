@@ -54,6 +54,7 @@ public class RentApartmentTask extends BaseApartmentTask {
             var apartments = apartmentRepository.getAllByTypes(Set.of(ApartmentType.RENT));
             log.info("RentApartment get source data");
             List<OnlinerApartmentRent> source = onlinerService.getRents();
+            log.info("RentApartment get all source data");
 
             List<Apartment> inserted = new ArrayList<>();
             List<Apartment> updated = new ArrayList<>();
@@ -81,10 +82,14 @@ public class RentApartmentTask extends BaseApartmentTask {
                     continue;
                 }
                 var newEntity = rentApartmentMapper.toEntity(apartment);
+
+                log.info("rent geodata proccessing... for -> lat: f% long:f5".formatted(newEntity.getLatitude(), newEntity.getLongitude()));
                 setGeoData(newEntity);
+
                 inserted.add(newEntity);
             }
 
+            log.info("rent database activity started");
             var sourceIds = source.stream().map(item->item.getId()).toList();
             List<Apartment> deleted = apartments.stream()
                     .filter(item->!sourceIds.contains(item.getRefId()) && item.getDeletedAt() == null)

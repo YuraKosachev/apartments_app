@@ -41,7 +41,8 @@ public class OnlinerServiceImpl implements OnlinerService {
             else{
                 log.info("sale request is null try next page ..");
             }
-            log.info("sale apartment page " + page + "/" + info.page().last() + " parsing completed. count items ->" + info.apartments().size());
+            var size = info != null ? info.apartments().size() : 0;
+            log.info("sale apartment page " + page + "/" + info.page().last() + " parsing completed. count items ->" + size);
             if (info.page().last() <= page) break;
         }
         return toSale;
@@ -63,7 +64,8 @@ public class OnlinerServiceImpl implements OnlinerService {
             } else {
                 log.info("rents request is null try next page ..");
             }
-            log.info("rent apartment page " + page + "/" + info.page().last() + " parsing completed. count items ->" + info.apartments().size());
+            var size = info != null ? info.apartments().size() : 0;
+            log.info("rent apartment page " + page + "/" + info.page().last() + " parsing completed. count items ->" + size);
             if (info.page().last() <= page) break;
         }
         return toRent;

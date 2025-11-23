@@ -79,10 +79,11 @@ public class SaleApartmentTask extends BaseApartmentTask {
                      continue;
                  }
                  var newEntity = saleApartmentMapper.toEntity(apartment);
+                log.info("sale geodata proccessing... for -> lat: f% long:f5".formatted(newEntity.getLatitude(), newEntity.getLongitude()));
                  setGeoData(newEntity);
                  inserted.add(newEntity);
             }
-
+            log.info("sale database activity started");
             var sourceIds = source.stream().map(item->item.getId()).toList();
             List<Apartment> deleted = apartments.stream()
                     .filter(item->!sourceIds.contains(item.getRefId()) && item.getDeletedAt() == null)
