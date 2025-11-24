@@ -24,22 +24,32 @@ public class OnlinerServiceImpl implements OnlinerService {
     private final SaleApartmentAll saleApartmentAll;
     private final RentApartmentAll rentApartmentAll;
 
+    private final int ATTEMPT_COUNT = 3;
+
     @Override
     public List<OnlinerApartmentSale> getSales() throws IOException, URISyntaxException, InterruptedException {
         List<OnlinerApartmentSale> toSale = new ArrayList<>();
         for (int page = 1; true; page++) {
-            log.info("sale apartment page " + page + " parsing started");
             OnlinerResponse<OnlinerApartmentSale> info = null;
-            try {
-                info = saleApartmentAll.getSaleApartments(new OnlinerRequest(page));
-            }catch (Exception e) {
-                log.error("sale request error -> " + e.getMessage());
-            }
+            int attempt = 0;
+
+            do {
+                try {
+                    log.info("sale apartment page " + page + " parsing started; attempt:" + attempt);
+                    info = saleApartmentAll.getSaleApartments(new OnlinerRequest(page));
+                    attempt = ATTEMPT_COUNT;
+                } catch (Exception e) {
+                    log.error("sale request error -> " + e.getMessage());
+                    attempt++;
+                }
+            } while (attempt < ATTEMPT_COUNT);
+
+
             if (info != null) {
                 toSale.addAll(info.apartments());
-            }
-            else{
+            } else {
                 log.info("sale request is null try next page ..");
+                continue;
             }
             var size = info != null ? info.apartments().size() : 0;
             log.info("sale apartment page " + page + "/" + info.page().last() + " parsing completed. count items ->" + size);
@@ -52,17 +62,24 @@ public class OnlinerServiceImpl implements OnlinerService {
     public List<OnlinerApartmentRent> getRents() throws IOException, URISyntaxException, InterruptedException {
         List<OnlinerApartmentRent> toRent = new ArrayList<>();
         for (int page = 1; true; page++) {
-            log.info("rent apartment page " + page + " parsing started");
             OnlinerResponse<OnlinerApartmentRent> info = null;
-            try {
-                info = rentApartmentAll.getRentApartments(new OnlinerRequest(page));
-            } catch (Exception e) {
-                log.error("rents request error -> " + e.getMessage());
-            }
+            int attempt = 0;
+            do {
+                try {
+                    log.info("rent apartment page " + page + " parsing started; attempt:" + attempt);
+                    info = rentApartmentAll.getRentApartments(new OnlinerRequest(page));
+                    attempt = ATTEMPT_COUNT;
+                } catch (Exception e) {
+                    log.error("rents request error -> " + e.getMessage());
+                    attempt++;
+                }
+            } while (attempt < ATTEMPT_COUNT);
+
             if (info != null) {
                 toRent.addAll(info.apartments());
             } else {
                 log.info("rents request is null try next page ..");
+                continue;
             }
             var size = info != null ? info.apartments().size() : 0;
             log.info("rent apartment page " + page + "/" + info.page().last() + " parsing completed. count items ->" + size);
