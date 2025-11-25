@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.*;
 import java.net.http.HttpClient;
 import java.time.Duration;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Configuration
 public class AppConfiguration {
@@ -79,5 +81,10 @@ public class AppConfiguration {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.findAndRegisterModules();
         return objectMapper;
+    }
+
+    @Bean(name = "onlinerExecutor")
+    public ExecutorService onlinerExecutor() {
+        return Executors.newFixedThreadPool(5); // можно сделать значение из application.yaml
     }
 }
